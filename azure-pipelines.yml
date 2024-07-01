@@ -1,24 +1,30 @@
+
+To configure your Azure pipeline YAML file to include Maven paths and other settings, you can use the Maven task provided by Azure Pipelines. Here’s an updated version of your YAML file with the Maven tasks and relevant inputs:
+
+yaml
+Copy code
 trigger:
 - main
 
 pool:
   name: 'Default'
   demands:
-  - agent.name -equals Deepaks-MacBook-Pro
-  - maven
+  - agent.name -equals Deepaks-MacBook-Pro  # Ensure this matches your agent name
+  - maven  # Demand Maven to be available on the agent
 
 steps:
 - task: Maven@3
   inputs:
-    mavenPomFile: 'pom.xml'
+    mavenPomFile: 'pom.xml'  # Path to your Maven POM file
+
 - task: Maven@4
   inputs:
-    mavenPomFile: 'pom.xml'
+    mavenPomFile: 'pom.xml'  # Path to your Maven POM file
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    javaHomeOption: 'JDKVersion'
-    mavenVersionOption: 'Default'
-    mavenAuthenticateFeed: false
-    effectivePomSkip: false
-    sonarQubeRunAnalysis: false
-  
+    javaHomeOption: 'JDKVersion'  # Specify JDK version to use
+    jdkVersionOption: '21.0'
+    mavenVersionOption: 'Default'  # Use default Maven version
+    mavenAuthenticateFeed: false  # Whether to authenticate Maven feeds (adjust based on your setup)
+    effectivePomSkip: false  # Set to true to skip processing of effective POM
+    sonarQubeRunAnalysis: false  # Whether to run SonarQube analysis
