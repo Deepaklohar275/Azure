@@ -4,13 +4,13 @@ trigger:
 pool:
   name: 'Default'
   demands:
-  - agent.name -equals Deepaks-MacBook-Pro
+  - agent.name -equals ip-172-31-16-160
   - maven
 
 steps:
 - script: |
     echo "Setting up Maven"
-    export MAVEN_HOME=/opt/homebrew/Cellar/maven/3.9.8/libexec
+    export MAVEN_HOME=/usr/share/maven
     export PATH=$MAVEN_HOME/bin:$PATH
     echo "MAVEN_HOME set to $MAVEN_HOME"
     echo "PATH set to $PATH"
