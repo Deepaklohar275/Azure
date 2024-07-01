@@ -5,6 +5,7 @@ pool:
   name: 'Default'
   demands:
   - agent.name -equals Deepaks-MacBook-Pro
+  - maven
 
 steps:
 - task: Maven@3
