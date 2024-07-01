@@ -4,22 +4,31 @@ trigger:
 pool:
   name: 'Default'
   demands:
-  - agent.name -equals Deepaks-MacBook-Pro  # Ensure this matches your agent name
-  - maven  # Demand Maven to be available on the agent
+  - agent.name -equals Deepaks-MacBook-Pro
+  - maven
 
 steps:
+- script: |
+    echo "Setting up Maven"
+    export MAVEN_HOME=/opt/homebrew/Cellar/maven/3.9.8/libexec
+    export PATH=$MAVEN_HOME/bin:$PATH
+    echo "MAVEN_HOME set to $MAVEN_HOME"
+    echo "PATH set to $PATH"
+  displayName: 'Set up Maven environment variables'
+
 - task: Maven@3
   inputs:
-    mavenPomFile: 'pom.xml'  # Path to your Maven POM file
+    mavenPomFile: 'pom.xml'
+    goals: 'clean install'
 
 - task: Maven@4
   inputs:
-    mavenPomFile: 'pom.xml'  # Path to your Maven POM file
+    mavenPomFile: 'pom.xml'
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    javaHomeOption: 'JDKVersion'  # Specify JDK version to use
-    jdkVersionOption: '21.0'  # Adjust this to the JDK version you want to use
-    mavenVersionOption: 'Default'  # Use default Maven version
-    mavenAuthenticateFeed: false  # Whether to authenticate Maven feeds (adjust based on your setup)
-    effectivePomSkip: false  # Set to true to skip processing of effective POM
-    sonarQubeRunAnalysis: false  # Whether to run SonarQube analysis
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '21.0'
+    mavenVersionOption: 'Default'
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: false
