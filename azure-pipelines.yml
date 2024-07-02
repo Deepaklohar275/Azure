@@ -4,13 +4,13 @@ trigger:
 pool:
   name: 'Default'
   demands:
-  - agent.name -equals ip-172-31-16-160
+  - agent.name -equals Deepaks-MacBook-Pro
   - maven
 
 steps:
 - script: |
     echo "Setting up Maven"
-    export MAVEN_HOME=/usr/share/maven
+    export MAVEN_HOME=/opt/homebrew/Cellar/maven/3.9.8/libexec
     export PATH=$MAVEN_HOME/bin:$PATH
     echo "MAVEN_HOME set to $MAVEN_HOME"
     echo "PATH set to $PATH"
@@ -25,7 +25,6 @@ steps:
   inputs:
     mavenPomFile: 'pom.xml'
     publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '21.0'
     mavenVersionOption: 'Default'
