@@ -1,10 +1,10 @@
 trigger:
- - main
+  - main
 
- pool:
- - vmImage: 'macos-latest'
+pool:
+  vmImage: 'macos-latest'
 
- steps:
+steps:
  - task: Maven@4
    inputs:
      mavenPomFile: 'pom.xml'
@@ -16,8 +16,8 @@ trigger:
      testResultsFiles: '**/surefire-reports/TEST-*.xml'
      goals: 'package'
 
-- task: PublishCodeCoverageResults@1
-  inputs:
+task: PublishCodeCoverageResults@1
+inputs:
     codeCoverageTool: "JaCoCo"
     summaryFileLocation: "$(System.DefaultWorkingDirectory)/**/site/jacoco/jacoco.xml"
     reportDirectory: "$(System.DefaultWorkingDirectory)/**/site/jacoco"
