@@ -25,6 +25,7 @@ steps:
   inputs:
     mavenPomFile: 'pom.xml'
     publishJUnitResults: true
+     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '21.0'
     mavenVersionOption: 'Default'
