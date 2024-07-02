@@ -7,28 +7,31 @@ pool:
   - agent.name -equals ip-172-31-16-160
   - maven
 
-steps:
-- script: |
-    echo "Setting up Maven"
-    export MAVEN_HOME=/usr/share/maven
-    export PATH=$MAVEN_HOME/bin:$PATH
-    echo "MAVEN_HOME set to $MAVEN_HOME"
-    echo "PATH set to $PATH"
-  displayName: 'Set up Maven environment variables'
+jobs:
+- job: CacheMaven
+  displayName: 'Cache Maven Dependencies'
+  steps:
+  - task: Cache@2
+    inputs:
+      key: 'maven | "$(Agent.OS)" | **/pom.xml'
+      path: ~/.m2/repository
+      cacheHitVar: CACHE_RESTORED
 
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml'
-    goals: 'clean install'
+- job: Build
+  dependsOn: CacheMaven
+  displayName: 'Build Job'
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - script: |
+      echo "Setting up Maven"
+      export MAVEN_HOME=/usr/share/maven
+      export PATH=$MAVEN_HOME/bin:$PATH
+      echo "MAVEN_HOME set to $MAVEN_HOME"
+      echo "PATH set to $PATH"
+    displayName: 'Set up Maven environment variables'
 
-- task: Maven@4
-  inputs:
-    mavenPomFile: 'pom.xml'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '21.0'
-    mavenVersionOption: 'Default'
-    mavenAuthenticateFeed: false
-    effectivePomSkip: false
-    sonarQubeRunAnalysis: false
+  - task: Maven@3
+    inputs:
+      mavenPomFile: 'pom.xml'
+      goals: 'clean install
