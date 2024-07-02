@@ -1,34 +1,24 @@
 trigger:
-- main
+ - main
 
-pool:
-  name: 'Default'
-  demands:
-  - agent.name -equals Deepaks-MacBook-Pro
-  - maven
+ pool:
+   vmImage: 'macos-latest'
 
-steps:
-- script: |
-    echo "Setting up Maven"
-    export MAVEN_HOME=/opt/homebrew/Cellar/maven/3.9.8/libexec
-    export PATH=$MAVEN_HOME/bin:$PATH
-    echo "MAVEN_HOME set to $MAVEN_HOME"
-    echo "PATH set to $PATH"
-  displayName: 'Set up Maven environment variables'
-
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml'
-    goals: 'install'
-
-- task: Maven@4
-  inputs:
-    mavenPomFile: 'pom.xml'
-    publishJUnitResults: true
+ steps:
+ - task: Maven@4
+   inputs:
+     mavenPomFile: 'pom.xml'
+     mavenOptions: '-Xmx3072m'
+     javaHomeOption: 'JDKVersion'
+     jdkVersionOption: $(jdkVersion)
+     jdkArchitectureOption: 'x64'
+     publishJUnitResults: false
      testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '21.0'
-    mavenVersionOption: 'Default'
-    mavenAuthenticateFeed: false
-    effectivePomSkip: false
-    sonarQubeRunAnalysis: false
+     goals: 'package'
+
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: "JaCoCo"
+    summaryFileLocation: "$(System.DefaultWorkingDirectory)/**/site/jacoco/jacoco.xml"
+    reportDirectory: "$(System.DefaultWorkingDirectory)/**/site/jacoco"
+    failIfCoverageEmpty: true
