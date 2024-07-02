@@ -19,7 +19,7 @@ steps:
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
-    goals: 'clean install'
+    goals: 'install'
 
 - task: Maven@4
   inputs:
