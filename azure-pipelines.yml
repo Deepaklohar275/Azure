@@ -27,12 +27,20 @@ stages:
           snyk auth $(SNYK_TOKEN)
           # explicitly allow scripts to continue if errors occur
           set +e
+          #CODE
           snyk code test --sarif-file-output=results.sarif || true
           RESULT=$?
           snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-code.html < results.sarif || true
           exit $RESULT
           continueOnError: true
           displayName: 'snyk code'
+          #CONTAINER
+          snyk container test deepaklohar/dockerhello:V1 --json-file-output=results.json || true
+          RESULT=$?
+          snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-container.html < results.json || true
+          exit $RESULT
+          continueOnError: true
+          displayName: 'snyk container'
 
     - task: Maven@4
       inputs:
