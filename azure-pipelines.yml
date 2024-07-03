@@ -27,6 +27,13 @@ stages:
           snyk auth 173f3477-cac0-44a8-a51d-0337b7f37003
           # explicitly allow scripts to continue if errors occur
           set +e
+          snyk code test --sarif-file-output=results.sarif || true
+          RESULT=$?
+          snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-code.html < results.sarif || true
+          exit $RESULT
+          continueOnError: true
+          displayName: 'snyk code'
+
     - task: Maven@4
       inputs:
         mavenPomFile: 'pom.xml'
