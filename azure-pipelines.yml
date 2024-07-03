@@ -29,7 +29,7 @@ stages:
           set +e
           #CODE
     - task: CmdLine@2
-      displayName: 'snyk install & auth'
+      displayName: 'Snyk Code Scan'
       inputs:
         script: |
           snyk code test --sarif-file-output=results.sarif || true
@@ -41,7 +41,7 @@ stages:
           #CONTAINER
 
     - task: CmdLine@2
-      displayName: 'snyk install & auth'
+      displayName: 'Container Scan'
       inputs:
         script: |
           snyk container test deepaklohar/snyk:Webgoat --json-file-output=results.json || true
@@ -50,6 +50,21 @@ stages:
           exit $RESULT
           continueOnError: true
           displayName: 'snyk container'
+    - task: CmdLine@2
+      displayName: 'Repository Scan'
+      inputs:
+       script: |
+        REPO_NAME="deepaklohar/snyk"
+        TAGS=$(curl -s https://registry.hub.docker.com/v1/repositories/$REPO_NAME/tags | jq -r '.[].name')
+        echo "cat $TAGS"
+        for TAG in $TAGS; do
+         snyk container test $REPO_NAME:$TAG --json-file-output=results-$TAG.json || true
+         RESULT=$?
+         snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-container-$TAG.html < results-$TAG.json || true
+         if [ $RESULT -ne 0 ]; then exit $RESULT; fi
+         done
+      continueOnError: true
+
 
     - task: Maven@4
       inputs:
