@@ -3,15 +3,37 @@ trigger:
 
 pool:
   vmImage: ubuntu-latest
-
-steps:
-  - task: Maven@4
-    inputs:
-      mavenPomFile: 'pom.xml'
-      mavenOptions: '-Xmx3072m'
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: default
-      jdkArchitectureOption: 'x64'
-      publishJUnitResults: false
-      testResultsFiles: '**/surefire-reports/TEST-*.xml'
-      goals: 'package'
+stages:
+- stage: __default
+  jobs:
+  - job: Job
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '12.x'
+      displayName: 'Install Node.js'
+    - task: CmdLine@2
+      inputs:
+        script: |
+          npm install
+    - task: CmdLine@2
+      displayName: 'snyk install & auth'
+      inputs:
+        script: |
+          npm install -g snyk snyk-to-html
+          mkdir html
+          snyk auth $(SNYK_TOKEN)
+          # explicitly allow scripts to continue if errors occur
+          set +e
+    - task: Maven@4
+      inputs:
+        mavenPomFile: 'pom.xml'
+        publishJUnitResults: false
+        javaHomeOption: 'JDKVersion'
+        mavenVersionOption: 'Default'
+        mavenOptions: '-Xmx3072m'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: false
