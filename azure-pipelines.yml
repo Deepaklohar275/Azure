@@ -35,9 +35,11 @@ stages:
           snyk code test --sarif-file-output=results.sarif || true
           RESULT=$?
           snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-code.html < results.sarif || true
+          snyk monitor || true
           exit $RESULT
           continueOnError: true
           displayName: 'snyk code'
+          
           #CONTAINER
 
     - task: CmdLine@2
@@ -47,6 +49,7 @@ stages:
           snyk container test deepaklohar/snyk:Webgoat --json-file-output=results.json || true
           RESULT=$?
           snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-container.html < results.json || true
+          snyk monitor || true
           exit $RESULT
           continueOnError: true
           displayName: 'snyk container'
@@ -63,6 +66,7 @@ stages:
          snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-container-$TAG.html < results-$TAG.json || true
          if [ $RESULT -ne 0 ]; then exit $RESULT; fi
          done
+         snyk monitor || true
       continueOnError: true
 
 
