@@ -21,8 +21,11 @@ stages:
     - task: CmdLine@2
       displayName: 'Install snyk-to-html and jq'
       inputs:
-        script: npm install -g snyk-to-html jq
-    
+        script: 
+          npm install -g snyk-to-html jq
+          npm install -g commander
+
+
     - task: CmdLine@2
       displayName: 'snyk install & auth'
       inputs:
@@ -33,29 +36,6 @@ stages:
           # explicitly allow scripts to continue if errors occur
           set +e
     
-    - task: CmdLine@2
-      displayName: 'Snyk Code Scan'
-      inputs:
-        script: |
-          snyk code test --sarif-file-output=results.sarif || true
-          RESULT=$?
-          snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-code.html < results.sarif || true
-          snyk monitor || true
-          exit $RESULT
-          continueOnError: true
-          displayName: 'snyk code'
-          
-    - task: CmdLine@2
-      displayName: 'Container Scan'
-      inputs:
-        script: |
-          snyk container test deepaklohar/snyk:Webgoat --json-file-output=results.json || true
-          RESULT=$?
-          snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-container.html < results.json || true
-          snyk monitor || true
-          exit $RESULT
-          continueOnError: true
-          displayName: 'snyk container'
 
     - task: CmdLine@2
       displayName: 'Repository Scan'
