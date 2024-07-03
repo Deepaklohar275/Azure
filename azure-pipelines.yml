@@ -62,7 +62,7 @@ stages:
       inputs:
        script: |
         REPO_NAME="deepaklohar/snyk"
-        TAGS=$(curl -s https://registry.hub.docker.com/v1/repositories/$REPO_NAME/tags | jq -r '.[].name')
+        TAGS=$(curl -s https://hub.docker.com/repository/docker/$REPO_NAME/tags | jq -r '.[].name')
         echo "cat $TAGS"
         for TAG in $TAGS; do
          snyk container test $REPO_NAME:$TAG --json-file-output=results-$TAG.json || true
