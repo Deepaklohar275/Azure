@@ -44,7 +44,7 @@ stages:
       displayName: 'snyk install & auth'
       inputs:
         script: |
-          snyk container test deepaklohar/dockerhello:V1 --json-file-output=results.json || true
+          snyk container test deepaklohar/snyk:Webgoat --json-file-output=results.json || true
           RESULT=$?
           snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-container.html < results.json || true
           exit $RESULT
