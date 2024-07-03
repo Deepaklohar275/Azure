@@ -28,6 +28,10 @@ stages:
           # explicitly allow scripts to continue if errors occur
           set +e
           #CODE
+    - task: CmdLine@2
+      displayName: 'snyk install & auth'
+      inputs:
+        script: |
           snyk code test --sarif-file-output=results.sarif || true
           RESULT=$?
           snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-code.html < results.sarif || true
@@ -35,6 +39,11 @@ stages:
           continueOnError: true
           displayName: 'snyk code'
           #CONTAINER
+
+    - task: CmdLine@2
+      displayName: 'snyk install & auth'
+      inputs:
+        script: |
           snyk container test deepaklohar/dockerhello:V1 --json-file-output=results.json || true
           RESULT=$?
           snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-container.html < results.json || true
