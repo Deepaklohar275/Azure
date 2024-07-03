@@ -2,9 +2,7 @@ trigger:
   - main
 
 pool:
-  name: 'Default'  # Replace with the actual name of your agent pool if different
-  demands:
-  - agent.name -equals Deepaks-MacBook-Pro
+  vmImage: ubuntu-latest
 
 steps:
   - task: Maven@4
