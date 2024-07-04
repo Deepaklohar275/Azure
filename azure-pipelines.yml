@@ -18,14 +18,17 @@ stages:
       inputs:
         script: |
           npm install
+
     - task: CmdLine@2
-      displayName: 'Install snyk-to-html and jq'
+      displayName: 'Install Python Dependencies'
       inputs:
-        script: 
-          npm install -g snyk-to-html jq
-          npm install -g commander
-
-
+        script: |
+          sudo apt update
+          sudo apt install -y python3 python3-pip
+          python3 -m pip install --upgrade pip
+          python3 -m pip install requests
+            
+      
     - task: CmdLine@2
       displayName: 'snyk install & auth'
       inputs:
@@ -35,23 +38,6 @@ stages:
           snyk auth $(SNYK_TOKEN)
           # explicitly allow scripts to continue if errors occur
           set +e
-    
-
-    - task: CmdLine@2
-      displayName: 'Repository Scan'
-      inputs:
-       script: |
-        REPO_NAME="deepaklohar/snyk"
-        TAGS=$(curl -s https://hub.docker.com/repository/docker/$REPO_NAME/tags | jq -r '.[].name')
-        echo "cat $TAGS"
-        for TAG in $TAGS; do
-         snyk container test $REPO_NAME:$TAG --json-file-output=results-$TAG.json || true
-         RESULT=$?
-         snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-container-$TAG.html < results-$TAG.json || true
-         if [ $RESULT -ne 0 ]; then exit $RESULT; fi
-         done
-         snyk monitor || true
-      continueOnError: true
 
     - task: Maven@4
       inputs:
