@@ -34,6 +34,18 @@ stages:
         script: |
           python multiContainerScript.py
       
+    - task: CmdLine@2
+      displayName: 'Snyk Code Scan'
+      inputs:
+        script: |
+          snyk code test --report --sarif-file-output=results.sarif || true
+          RESULT=$?
+          snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-code.html < results.sarif || true
+          snyk monitor || true	
+          exit $RESULT
+          continueOnError: true
+          displayName: 'snyk code'
+          
       
     - task: CmdLine@2
       displayName: 'snyk install & auth'
