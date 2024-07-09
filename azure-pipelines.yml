@@ -10,6 +10,8 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
+
+# install Dependency for snyk container scan
     - task: NodeTool@0
       inputs:
         versionSpec: '12.x'
@@ -33,29 +35,8 @@ stages:
       inputs:
         script: |
           python multiContainerScript.py
+          displayName: 'Run Python script to generate image tags'
       
-    - task: CmdLine@2
-      displayName: 'Snyk Code Scan'
-      inputs:
-        script: |
-          snyk code test --report --sarif-file-output=results.sarif || true
-          RESULT=$?
-          snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-code.html < results.sarif || true
-          snyk monitor || true	
-          exit $RESULT
-          continueOnError: true
-          displayName: 'snyk code'
-          
-      
-    - task: CmdLine@2
-      displayName: 'snyk install & auth'
-      inputs:
-        script: |
-          npm install -g snyk snyk-to-html
-          mkdir html
-          snyk auth $(SNYK_TOKEN)
-          # explicitly allow scripts to continue if errors occur
-          set +e
 
     - task: Maven@4
       inputs:
