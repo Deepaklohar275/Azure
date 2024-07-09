@@ -1,0 +1,3 @@
+variables :
+- name: A
+  value: 4
