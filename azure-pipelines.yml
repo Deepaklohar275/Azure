@@ -37,7 +37,6 @@ stages:
       inputs:
         script: |
           python dockerImageTags.py
-        
     - task: DownloadPipelineArtifact@2
       inputs:
         artifactName: 'image_tags'
