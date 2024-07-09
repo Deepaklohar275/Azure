@@ -1,4 +1,6 @@
+import yaml
 import requests
+
 
 def imagetag (url):
     tags = []
@@ -11,15 +13,22 @@ def imagetag (url):
         tags.append(image_dict['name'])
     return tags
 
+
 url = "https://hub.docker.com/v2/repositories/deepaklohar/snyk/tags"
 headers = {
     'Accept': 'application/json',  # Specify that you want a JSON response
-    'Authorization': 'Bearer no need to enter the PAT token'  # Replace <your_docker_hub_token> with your actual token
 }
-
 tags =imagetag(url)
+#save to YAML as a Data Variable
+data = {'imageTags': tags}
+print(data)
 print(tags)
 
+
+with open('image_tags.yaml', 'w') as file:
+    yaml.dump(data, file)
+    
+    
 
     
 
