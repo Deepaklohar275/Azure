@@ -10,8 +10,13 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
- name: A
- Value: 2
-steps:
-- script: 
-    yaml.load(Quick brown fox jumped over the lazy dog.)
+- name: A
+  value: 2
+
+
+stages:
+  - stage: A
+    jobs:
+      - job: A
+        steps:
+          - script: echo "Hello"
