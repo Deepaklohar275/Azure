@@ -34,7 +34,7 @@ stages:
       displayName: 'Run Python Script'
       inputs:
         script: |
-          python multiContainerScript.py
+          python dockerImageTags.py
           displayName: 'Run Python script to generate image tags'
       
 
