@@ -31,11 +31,11 @@ stages:
           python3 -m pip install requests
     
     - task: CmdLine@2
-      displayName: 'Run Python Script'
+      displayName: 'Run Python script to generate image tags'
       inputs:
         script: |
           python dockerImageTags.py
-          displayName: 'Run Python script to generate image tags'
+          
     - task: DownloadPipelineArtifact@2
       inputs:
         artifactName: 'image_tags'
