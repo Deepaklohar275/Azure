@@ -50,10 +50,11 @@ stages:
       displayName: 'Download image tags artifact'
 
     - script: |
-        python -c " import yaml; \
-          with open('$(Pipeline.Workspace)/image_tags/image_tags.yaml', 'r') as file:  \
-                data = yaml.safe_load(file); \
-          print(f'##vso[task.setvariable variable=IMAGE_TAGS]{data["imageTags"]}')"
+        echo "import yaml; \
+        with open('$(Pipeline.Workspace)/image_tags/image_tags.yaml', 'r') as file: \
+          data = yaml.safe_load(file); \
+        print(f'##vso[task.setvariable variable=IMAGE_TAGS]{data['imageTags']}') " > read_yaml.py
+        python read_yaml.py
       displayName: 'Read image tags from YAML file and set pipeline variable'
 
 
