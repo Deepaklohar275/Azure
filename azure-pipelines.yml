@@ -37,10 +37,18 @@ stages:
       inputs:
         script: |
           python dockerImageTags.py
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: 'image_tags.yaml'
+        artifact: 'image_tags'
+      displayName: 'Publish image tags artifact'
+
     - task: DownloadPipelineArtifact@2
       inputs:
         artifactName: 'image_tags'
         targetPath: '$(Pipeline.Workspace)'
+      displayName: 'Download image tags artifact'
+
     - script: |
         python -c "
         import yaml
