@@ -1,3 +1,6 @@
+variables:
+  - group: Authentication
+
 jobs:
       - job: Install_Dependecies
         steps:
