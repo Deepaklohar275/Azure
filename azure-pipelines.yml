@@ -5,53 +5,26 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
+  group: Authentication
   IMAGE_TAGS: ''
 
 stages:
+  
   - stage: Install_Dependencies 
     jobs:
-      - template: Install_Dependencies_Template.yml
+      - template : Install_Dependencies_Template.yml
       
   - stage: SAST
     jobs:
     - template : SAST.yml
-#        - task: CmdLine@2
-#          displayName: 'Snyk Code Scan'
-#          inputs:
-#            script: |
-#             snyk code test --sarif-file-output=results.sarif || true
-#              RESULT=$?
-#              snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-code.html < results.sarif || true
-#              snyk monitor || true	
-#              exit $RESULT
-#          continueOnError: true
 
   - stage: SCA
     jobs:
       - template: sca.yml
-          
+       
   - stage: Container_Scan
     jobs:
-      - job: Container_Scan
-        steps:
-#        - task: SnykSecurityScan@1
-#          inputs:
-#            serviceConnectionEndpoint: 'Snyk Authentication'
-#            testType: 'container'
-#            dockerImageName: '1.0.0'
-#            dockerfilePath: 'Dockerfile'
-#            monitorWhen: 'always'
-#            failOnIssues: true
-        - task: CmdLine@2
-          displayName: 'Container Scan'
-          inputs:
-            script: |
-              snyk container test deepaklohar/snyk:Webgoat --json-file-output=results.json || true
-              RESULT=$?
-              snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-container.html < results.json || true
-              snyk monitor || true
-              exit $RESULT
-          continueOnError: true
+     - template: azure-pipelines-3.yml
 
   - stage: Multiple_Container_Scan
     jobs:
