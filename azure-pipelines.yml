@@ -14,16 +14,8 @@ stages:
       
   - stage: SAST
     jobs:
-      - job: SAST
-        steps:
-        - task: SnykSecurityScan@1
-          inputs:
-            serviceConnectionEndpoint: 'Snyk Authentication'
-            testType: 'code'
-            failOnIssues: true
-            projectName: Azure
-          condition: succeededOrFailed()
-          displayName: "SAST"
+    - template : 
+      
 
 #        - task: CmdLine@2
 #          displayName: 'Snyk Code Scan'
