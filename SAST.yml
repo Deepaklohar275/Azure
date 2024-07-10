@@ -1,0 +1,10 @@
+- job: SAST
+        steps:
+        - task: SnykSecurityScan@1
+          inputs:
+            serviceConnectionEndpoint: 'Snyk Authentication'
+            testType: 'code'
+            failOnIssues: true
+            projectName: Azure
+          condition: succeededOrFailed()
+          displayName: "SAST"
