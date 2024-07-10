@@ -9,3 +9,4 @@
             #dockerfilePath: 'Dockerfile'
             monitorWhen: 'always'
             failOnIssues: true
+          condition: succeededOrFailed()
