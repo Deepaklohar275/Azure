@@ -38,6 +38,9 @@ stages:
             serviceConnectionEndpoint: 'Snyk Authentication'
             testType: 'code'
             failOnIssues: true
+            projectName: Azure
+          condition: succeededOrFailed()
+          displayName: "SAST"
 
 #        - task: CmdLine@2
 #          displayName: 'Snyk Code Scan'
@@ -49,6 +52,15 @@ stages:
 #              snyk monitor || true	
 #              exit $RESULT
 #          continueOnError: true
+        - task: SnykSecurityScan@1
+          inputs:
+            serviceConnectionEndpoint: 'Snyk Authentication'
+            testType: 'app'
+            monitorWhen: 'always'
+            failOnIssues: true
+          condition: succeededOrFailed()
+          displayName: "SCA"
+
           
         
         
