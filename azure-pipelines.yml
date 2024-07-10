@@ -35,7 +35,7 @@ stages:
         steps:
         - task: SnykSecurityScan@1
           inputs:
-            serviceConnectionEndpoint: 'Deepak Lohar'
+            serviceConnectionEndpoint: 'Snyk Authentication'
             testType: 'code'
             failOnIssues: true
 
