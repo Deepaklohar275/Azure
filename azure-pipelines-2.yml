@@ -1,0 +1,21 @@
+jobs:
+  - job: Container_Scan
+    steps:
+    - task: SnykSecurityScan@1
+      inputs:
+          serviceConnectionEndpoint: 'Snyk Authentication'
+          testType: 'container'
+          dockerImageName: '1.0.0'
+          dockerfilePath: 'Dockerfile'
+          monitorWhen: 'always'
+          failOnIssues: true
+
+
+#        - task: SnykSecurityScan@1
+#          inputs:
+#            serviceConnectionEndpoint: 'Snyk Authentication'
+#            testType: 'container'
+#            dockerImageName: '1.0.0'
+#            dockerfilePath: '
+#            monitorWhen: 'always'
+#            failOnIssues: true
