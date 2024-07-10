@@ -3,68 +3,47 @@ trigger:
 
 pool:
   vmImage: ubuntu-latest
+
+
 stages:
-- stage: __default
-  jobs:
-  - job: Job
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-
-# install Dependency for snyk container scan
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '12.x'
-      displayName: 'Install Node.js'
-    - task: CmdLine@2
-      inputs:
-        script: |
-          npm install
-
-    - task: CmdLine@2
-      displayName: 'Install Python Dependencies'
-      inputs:
-        script: |
-          sudo apt update
-          sudo apt install -y python3 python3-pip
-          python3 -m pip install --upgrade pip
-          python3 -m pip install requests
-          echo "Installing pyyaml..."
-          pip install pyyaml
-    
-    - task: CmdLine@2
-      displayName: 'Run Python script to generate image tags'
-      inputs:
-        script: |
-          python dockerImageTags.py
-    - task: PublishPipelineArtifact@1
-      inputs:
-        targetPath: 'image_tags.yaml'
-        artifact: 'image_tags'
-      displayName: 'Publish image tags artifact'
-
-    - task: DownloadPipelineArtifact@2
-      inputs:
-        artifactName: 'image_tags'
-        targetPath: '$(Pipeline.Workspace)'
-      displayName: 'Download image tags artifact'
-
-    - script: |
-        echo "import yaml; \
-        with open('$(Pipeline.Workspace)/image_tags/image_tags.yaml', 'r') as file: \
-          data = yaml.safe_load(file); \
-        print(f'##vso[task.setvariable variable=IMAGE_TAGS]{data['imageTags']}') " > read_yaml.py
-        python read_yaml.py
-      displayName: 'Read image tags from YAML file and set pipeline variable'
-
-
-    - task: Maven@4
-      inputs:
-        mavenPomFile: 'pom.xml'
-        publishJUnitResults: false
-        javaHomeOption: 'JDKVersion'
-        mavenVersionOption: 'Default'
-        mavenOptions: '-Xmx3072m'
-        mavenAuthenticateFeed: false
-        effectivePomSkip: false
-        sonarQubeRunAnalysis: false
+  - stage: Install Dependencies 
+    jobs:
+      - job: Install_Dependecies
+        steps:
+          - # install Dependency for snyk container scan
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '12.x'
+          displayName: 'Install Node.js'
+          - task: CmdLine@2
+            inputs:
+              script: 'npm install'
+          - task: CmdLine@2
+            displayName: 'Install Python Dependencies'
+            inputs:
+              script: |
+                sudo apt update
+                sudo apt install -y python3 python3-pip
+                python3 -m pip install --upgrade pip
+                python3 -m pip install requests
+                echo "Installing pyyaml..."
+                pip install pyyaml
+  
+  - stage: SAST
+    jobs:
+      - job: SAST
+        steps:
+        - task: CmdLine@2
+          displayName: 'Snyk Code Scan'
+          inputs:
+            script: |
+              snyk code test --sarif-file-output=results.sarif || true
+              RESULT=$?
+              snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-code.html < results.sarif || true
+              snyk monitor || true	
+              exit $RESULT
+          continueOnError: true
+          
+        
+        
+   
