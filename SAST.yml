@@ -1,5 +1,6 @@
-- job: SAST
-        steps:
+jobs:
+  - job: SAST
+    steps:
         - task: SnykSecurityScan@1
           inputs:
             serviceConnectionEndpoint: 'Snyk Authentication'
