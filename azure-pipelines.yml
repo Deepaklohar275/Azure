@@ -3,7 +3,7 @@ trigger:
 
 pool:
   vmImage: ubuntu-latest
-  
+
 variables:
   IMAGE_TAGS: ''
 
@@ -86,7 +86,7 @@ stages:
 #            serviceConnectionEndpoint: 'Snyk Authentication'
 #            testType: 'container'
 #            dockerImageName: '1.0.0'
-#            dockerfilePath: '/Dockerfile'
+#            dockerfilePath: 'Dockerfile'
 #            monitorWhen: 'always'
 #            failOnIssues: true
         - task: CmdLine@2
