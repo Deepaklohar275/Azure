@@ -6,21 +6,21 @@ pool:
 
 
 stages:
-  - stage: Install Dependencies 
+  - stage: Install_Dependencies 
     jobs:
       - job: Install_Dependecies
         steps:
-          - # install Dependency for snyk container scan
+        # install Dependency for snyk container scan
         - task: NodeTool@0
           inputs:
             versionSpec: '12.x'
           displayName: 'Install Node.js'
-          - task: CmdLine@2
-            inputs:
-              script: 'npm install'
-          - task: CmdLine@2
-            displayName: 'Install Python Dependencies'
-            inputs:
+        - task: CmdLine@2
+          inputs:
+            script: 'npm install'
+        - task: CmdLine@2
+          displayName: 'Install Python Dependencies'
+          inputs:
               script: |
                 sudo apt update
                 sudo apt install -y python3 python3-pip
