@@ -11,4 +11,3 @@
             monitorWhen: 'always'
             failOnIssues: false
           condition: succeededOrFailed()
-          continueOnError: true
