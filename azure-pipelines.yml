@@ -28,7 +28,7 @@ stages:
 
   - stage: SCA
     jobs:
-      - template: SCA.yml
+      - template: sca.yml
           
   - stage: Container_Scan
     jobs:
