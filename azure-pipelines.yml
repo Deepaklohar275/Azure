@@ -52,6 +52,11 @@ stages:
 #              snyk monitor || true	
 #              exit $RESULT
 #          continueOnError: true
+
+  - stage: SCA
+    jobs:
+      - job: SCA
+        steps:
         - task: SnykSecurityScan@1
           inputs:
             serviceConnectionEndpoint: 'Snyk Authentication'
@@ -60,8 +65,26 @@ stages:
             failOnIssues: true
           condition: succeededOrFailed()
           displayName: "SCA"
-
           
-        
-        
-   
+  - stage: Container_Scan
+    jobs:
+      - job: Container_Scan
+        steps:
+#        - task: SnykSecurityScan@1
+#          inputs:
+#            serviceConnectionEndpoint: 'Snyk Authentication'
+#            testType: 'container'
+#            dockerImageName: '1.0.0'
+#            dockerfilePath: '/Dockerfile'
+#            monitorWhen: 'always'
+#            failOnIssues: true
+        - task: CmdLine@2
+          displayName: 'Container Scan'
+          inputs:
+            script: |
+              snyk container test deepaklohar/snyk:Webgoat --json-file-output=results.json || true
+              RESULT=$?
+              snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-container.html < results.json || true
+              snyk monitor || true
+              exit $RESULT
+          continueOnError: true
