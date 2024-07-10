@@ -1,0 +1,11 @@
+jobs:
+  - job: 
+    steps:
+    - task: SnykSecurityScan@1
+      inputs:
+        serviceConnectionEndpoint: 'Snyk Authentication'
+        testType: 'app'
+        monitorWhen: 'always'
+        failOnIssues: true
+      condition: suceededOrFailed()
+      displayName: SCA
