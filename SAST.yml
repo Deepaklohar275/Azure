@@ -7,5 +7,5 @@ jobs:
             testType: 'code'
             failOnIssues: true
             projectName: Azure
-          condition: succeededOrFailed()
+          #condition: succeededOrFailed()
           displayName: "SAST"
