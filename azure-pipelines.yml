@@ -14,9 +14,7 @@ stages:
       
   - stage: SAST
     jobs:
-    - template : 
-      
-
+    - template : SAST.yml
 #        - task: CmdLine@2
 #          displayName: 'Snyk Code Scan'
 #          inputs:
@@ -30,16 +28,7 @@ stages:
 
   - stage: SCA
     jobs:
-      - job: SCA
-        steps:
-        - task: SnykSecurityScan@1
-          inputs:
-            serviceConnectionEndpoint: 'Snyk Authentication'
-            testType: 'app'
-            monitorWhen: 'always'
-            failOnIssues: true
-          condition: succeededOrFailed()
-          displayName: "SCA"
+      - template: SCA.yml
           
   - stage: Container_Scan
     jobs:
