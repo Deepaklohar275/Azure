@@ -1,8 +1,8 @@
-variables:
-  - group: Authentication
 
 jobs:
       - job: Install_Dependecies
+        variables:
+        - group: Authentication
         steps:
         # install Dependency for snyk container scan
         - task: NodeTool@0
