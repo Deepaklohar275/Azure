@@ -5,8 +5,10 @@
           inputs:
             serviceConnectionEndpoint: 'Snyk Authentication'
             testType: 'container'
-            dockerImageName: 'deepaklohar/snyk:Webgoat'
+            dockerImageName: 'deepaklohar/petclini:V2'
+            #dockerImageName: 'deepaklohar/snyk:Webgoat'
             #dockerfilePath: 'Dockerfile'
             monitorWhen: 'always'
             failOnIssues: true
           condition: succeededOrFailed()
+          continueOnError: true
