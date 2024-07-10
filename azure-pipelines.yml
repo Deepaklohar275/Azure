@@ -33,16 +33,22 @@ stages:
     jobs:
       - job: SAST
         steps:
-        - task: CmdLine@2
-          displayName: 'Snyk Code Scan'
+        - task: SnykSecurityScan@1
           inputs:
-            script: |
-              snyk code test --sarif-file-output=results.sarif || true
-              RESULT=$?
-              snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-code.html < results.sarif || true
-              snyk monitor || true	
-              exit $RESULT
-          continueOnError: true
+            serviceConnectionEndpoint: 'Deepak Lohar'
+            testType: 'code'
+            failOnIssues: true
+
+#        - task: CmdLine@2
+#          displayName: 'Snyk Code Scan'
+#          inputs:
+#            script: |
+#             snyk code test --sarif-file-output=results.sarif || true
+#              RESULT=$?
+#              snyk-to-html -o $(Build.ArtifactStagingDirectory)/results-code.html < results.sarif || true
+#              snyk monitor || true	
+#              exit $RESULT
+#          continueOnError: true
           
         
         
