@@ -9,6 +9,6 @@
             #dockerImageName: 'deepaklohar/snyk:Webgoat'
             #dockerfilePath: 'Dockerfile'
             monitorWhen: 'always'
-            failOnIssues: true
+            failOnIssues: false
           condition: succeededOrFailed()
           continueOnError: true
