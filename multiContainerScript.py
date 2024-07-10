@@ -1,35 +1,49 @@
+import yaml
 import requests
-import json
-# url = 'https://hub.docker.com/repository/docker/deepaklohar/snyk/tags
-# Function to fetch tags from Docker Hub
-def fetch_docker_tags(url):
-    tags = []
-    while url:
-        response = requests.get(url)
-        data = response.json()
-        tags.extend(data['results'])
-        url = data.get('next')
+tags = []
+def imagetag (url):
+
+    r= requests.get(url, headers=headers)
+    response_dict = r.json()
+    image_dicts = response_dict['results']
+    image_dict= image_dicts[0]
+    for image_dict in image_dicts:
+        #print(image_dict['name'])
+        tags.append(image_dict['name'])
     return tags
-
-# Function to process tags and save to a JSON file
-def process_tags(tags):
-    processed_tags = {}
-    for tag in tags:
-        tag_name = tag['name']
-        for image in tag['images']:
-            digest = image['digest']
-            if digest not in processed_tags:
-                processed_tags[digest] = []
-            processed_tags[digest].append(tag_name)
-    return processed_tags
-
-# Fetch and process tags
 url = "https://hub.docker.com/v2/repositories/deepaklohar/snyk/tags"
-tags = fetch_docker_tags(url)
-processed_tags = process_tags(tags)
+headers = {
+    'Accept': 'application/json',  # Specify that you want a JSON response
+}
+tags =imagetag(url)
+#save to YAML as a Data Variable
+data = {'imageTags': tags}
+print(data)
+print(tags)
+with open('Tags.yaml', 'w') as file:
+    yaml.dump(data, file, default_flow_style=False)
 
-# Save to JSON file
-with open('openjdk-tags.json', 'w') as f:
-    json.dump(processed_tags, f, indent=2)
+    
+    
 
-print("Tags have been processed and saved to openjdk-tags.json")
+    
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
