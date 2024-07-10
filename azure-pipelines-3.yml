@@ -1,0 +1,11 @@
+    jobs:
+      - job: Container_Scan
+        steps:
+        - task: SnykSecurityScan@1
+          inputs:
+            serviceConnectionEndpoint: 'Snyk Authentication'
+            testType: 'container'
+            dockerImageName: 'deepaklohar/snyk:Webgoat'
+            #dockerfilePath: 'Dockerfile'
+            monitorWhen: 'always'
+            failOnIssues: true
