@@ -16,7 +16,7 @@ jobs:
           serviceConnectionEndpoint: 'Snyk Authentication'
           testType: 'container'
           dockerImageName: 'deepaklohar/petclini:V2'
-          dockerfilePath: 'Dockerfile'
+          dockerfilePath: './Dockerfile'
           monitorWhen: 'always'
           failOnIssues: false
         condition: succeededOrFailed()
