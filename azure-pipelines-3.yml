@@ -7,7 +7,7 @@
             testType: 'container'
             dockerImageName: 'deepaklohar/petclini:V2'
             #dockerImageName: 'deepaklohar/snyk:Webgoat'
-            #dockerfilePath: 'Dockerfile'
+            dockerfilePath: 'Dockerfile'
             monitorWhen: 'always'
             failOnIssues: false
           condition: succeededOrFailed()
