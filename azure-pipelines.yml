@@ -22,6 +22,6 @@ stages:
     jobs:
       - template: sca.yml
        
-#  - stage: Container_Scan
-#    jobs:
-#     - template: azure-pipelines.yml
+  - stage: Container_Scan
+    jobs:
+     - template: cscan.yml
