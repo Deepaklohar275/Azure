@@ -1,7 +1,5 @@
-#trigger:
-#  - main
-
-  
+trigger:
+  - main
 
 pool:
   vmImage: ubuntu-latest
@@ -24,25 +22,6 @@ stages:
     jobs:
       - template: sca.yml
        
-  - stage: Container_Scan
-    jobs:
-     - template: azure-pipelines-3.yml
-
-  - stage: Multiple_Container_Scan
-    jobs:
-      - job: Multiple_Container_Scan
-        steps:
-        - task: CmdLine@2
-          displayName: 'Run Python script to generate image tags'
-          inputs:
-            script: |
-              python dockerImageTags.py 
-              python -c "
-              import yaml
-              with open('Tags.yaml', 'r') as file:
-                data = yaml.safe_load(file)"
-                print(data)
-              #print(f"##vso[task.setvariable variable=IMAGE_TAGS]{{data['tags']}}")
-        - script: |
-            echo "Using image tags: $(IMAGE_TAGS)"
-          displayName: 'Use image tags in pipeline step'
+#  - stage: Container_Scan
+#    jobs:
+#     - template: azure-pipelines.yml
