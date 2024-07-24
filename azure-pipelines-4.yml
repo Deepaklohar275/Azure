@@ -18,6 +18,7 @@ stages:
           - script: | 
               echo $PATH
               condition: always()
+              set +e
     
   - stage: SAST
     jobs:
