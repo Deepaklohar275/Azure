@@ -7,7 +7,8 @@ stages:
       - job: Install
         steps:
           - script: |
-              npm install -g snyk
+              npm install -g snyk snyk-to-html
+              mkdir -p html
               snyk --version
             condition: always()
           
