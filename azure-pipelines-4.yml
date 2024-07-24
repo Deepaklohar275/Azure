@@ -21,10 +21,12 @@ stages:
               condition: always()
               set +e
     
-  - stage: SAST
-    jobs:
-      - job: SAST
-        steps:
           - script: |
               snyk code test
             condition: always()
+            displayName: sast
+            
+          - script: |
+              snyk test --all-projects --detection-depth=4
+            condition: always()
+            displayName: sca
