@@ -1,0 +1,22 @@
+
+pool:
+  vmImage: ubuntu-latest
+stages:
+  - stage: Install
+    jobs:
+      - job: Install
+        steps:
+          - script: |
+              npm install -g snyk
+            condition: always()
+          
+          - script: |
+              snyk auth 173f3477-cac0-44a8-a51d-0337b7f37003
+            condition: always()
+    
+  - stage: SAST
+    jobs:
+      - job: SAST
+        steps:
+          - script: snyk code test
+            condition: always()
