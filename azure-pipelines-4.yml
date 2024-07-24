@@ -13,6 +13,10 @@ stages:
           - script: |
               snyk auth 173f3477-cac0-44a8-a51d-0337b7f37003
             condition: always()
+          
+          - script: | 
+              echo $PATH
+              condition: always()
     
   - stage: SAST
     jobs:
