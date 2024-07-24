@@ -25,5 +25,6 @@ stages:
     jobs:
       - job: SAST
         steps:
-          - script: snyk code test
+          - script: |
+              snyk code test
             condition: always()
