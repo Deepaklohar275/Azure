@@ -8,6 +8,7 @@ stages:
         steps:
           - script: |
               npm install -g snyk
+              snyk --version
             condition: always()
           
           - script: |
